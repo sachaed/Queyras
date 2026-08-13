@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Queyras — Topo-guide · GR5 · Septembre</title>
+<meta name="description" content="Trek de 6 jours dans le massif du Queyras : Ceillac, Saint-Véran, Lac Foréant, Abriès. Itinéraire, profil altimétrique, budget et logistique route."/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --map:#faf8f1;
+  --map-2:#f1ede1;
+  --map-3:#e7e1cf;
+  --contour:#d7cbb0;
+  --ink:#22261f;
+  --ink-2:#565b4f;
+  --ink-3:#8e9179;
+  --balise:#cf3a26;
+  --balise-2:#a52c1c;
+  --slate:#1d2a30;
+  --slate-2:#2b3c44;
+  --larch:#c08b2c;
+  --water:#3f7f96;
+  --rule:rgba(32,36,31,.16);
+  --rule-2:rgba(32,36,31,.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--map);
+  color:var(--ink);
+  font-family:'Newsreader',Georgia,serif;
+  font-size:17.5px;
+  line-height:1.68;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+button{font:inherit;cursor:pointer;background:none;border:none;color:inherit}
+img{max-width:100%;display:block}
+a{color:inherit}
+
+/* contour-line paper texture */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  z-index:0;pointer-events:none;
+  background-image:
+    repeating-radial-gradient(ellipse 120% 90% at 18% 12%, transparent 0 28px, rgba(196,178,138,.26) 28px 29px),
+    repeating-radial-gradient(ellipse 100% 130% at 88% 74%, transparent 0 33px, rgba(196,178,138,.18) 33px 34px);
+  opacity:.34;
+}
+
+/* ============ BALISE GR ============ */
+.balise{
+  display:inline-block;
+  width:26px;height:9px;
+  background:linear-gradient(180deg,#fff 0 50%,var(--balise) 50% 100%);
+  border:1px solid rgba(32,36,31,.35);
+  flex-shrink:0;
+}
+.balise.sm{width:18px;height:6px}
+
+/* ============ HEADER ============ */
+header{
+  position:sticky;top:0;z-index:60;
+  background:rgba(242,239,228,.94);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.hd{
+  max-width:1080px;margin:0 auto;
+  padding:11px 20px;
+  display:flex;align-items:center;gap:14px;
+}
+.mark{
+  display:flex;align-items:center;gap:9px;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;
+  font-size:15px;
+  letter-spacing:-.02em;
+  white-space:nowrap;
+}
+.mark .sub{
+  font-family:'DM Mono',monospace;
+  font-weight:400;
+  font-size:10px;
+  letter-spacing:.16em;
+  color:var(--ink-3);
+  text-transform:uppercase;
+}
+@media(max-width:620px){.mark .sub{display:none}}
+
+.tabs{
+  display:flex;gap:5px;flex:1;min-width:0;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex-shrink:0;
+  padding:7px 14px;
+  border:1px solid var(--rule);
+  border-radius:2px;
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--ink-2);
+  white-space:nowrap;
+  transition:background .15s,color .15s,border-color .15s;
+}
+.tab > *{pointer-events:none}
+.tab.active{background:var(--ink);color:var(--map);border-color:var(--ink)}
+
+/* ============ HERO ============ */
+.hero{
+  position:relative;z-index:2;
+  max-width:1080px;margin:22px auto 0;padding:0 20px;
+}
+.hero-frame{
+  position:relative;
+  height:38vh;min-height:230px;max-height:340px;
+  overflow:hidden;
+  border:1px solid var(--rule);
+  background:linear-gradient(135deg,#dfe3dc,#cfc9b4);
+}
+.hero-frame img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:0;transition:opacity 1s;
+}
+.hero-frame img.on{opacity:1}
+.hero-frame::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(34,38,31,.28) 0%,transparent 45%);
+}
+.hero-tag{
+  position:absolute;left:0;bottom:0;z-index:3;
+  display:flex;align-items:center;gap:9px;
+  background:var(--map);
+  color:var(--ink-2);
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  padding:7px 14px;
+  border-top:1px solid var(--rule);border-right:1px solid var(--rule);
+}
+.hero-in{
+  max-width:1080px;margin:0 auto;
+  padding:26px 20px 8px;
+  position:relative;z-index:2;
+}
+.hero-kicker{
+  display:flex;align-items:center;gap:11px;
+  font-family:'DM Mono',monospace;
+  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--balise);
+  margin-bottom:14px;
+}
+.hero h1{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;
+  font-size:clamp(56px,15vw,128px);
+  line-height:.82;
+  letter-spacing:-.05em;
+  margin-bottom:16px;
+  color:var(--ink);
+}
+.hero h1 em{font-style:normal;color:var(--balise)}
+.hero-sub{
+  font-size:clamp(16px,2.3vw,20px);
+  max-width:620px;
+  color:var(--ink-2);
+  line-height:1.5;
+}
+
+/* ============ STATS ============ */
+.stats{border-bottom:1px solid var(--rule);position:relative;z-index:2;background:var(--map)}
+.stats-in{
+  max-width:1080px;margin:0 auto;padding:20px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+}
+@media(max-width:760px){.stats-in{grid-template-columns:repeat(3,1fr);gap:16px 0}}
+@media(max-width:420px){.stats-in{grid-template-columns:repeat(2,1fr)}}
+.st{padding:0 14px;border-right:1px dashed var(--rule)}
+.st:first-child{padding-left:0}
+.st:last-child{border-right:none}
+@media(max-width:760px){.st{border-right:none;padding:0 10px}}
+.st .k{
+  font-family:'DM Mono',monospace;
+  font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:5px;
+}
+.st .v{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:700;font-size:27px;line-height:1;letter-spacing:-.03em;
+}
+.st .v small{font-size:12px;font-weight:400;color:var(--ink-3);margin-left:2px}
+
+/* ============ COUNTDOWN ============ */
+.cd{text-align:center;padding:46px 20px 26px;position:relative;z-index:2}
+.cd-k{
+  font-family:'DM Mono',monospace;
+  font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:10px;
+}
+.cd-v{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;
+  font-size:clamp(66px,17vw,132px);
+  line-height:.9;letter-spacing:-.05em;
+  color:var(--balise);
+}
+.cd-s{font-style:italic;color:var(--ink-2);margin-top:8px;font-size:16px}
+
+/* ============ PANELS ============ */
+.panel{display:none;padding:30px 0 40px;position:relative;z-index:2}
+.panel.on{display:block;animation:pin .45s cubic-bezier(.22,.68,.4,1)}
+@keyframes pin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+.sec-k{
+  display:flex;align-items:center;gap:11px;
+  font-family:'DM Mono',monospace;
+  font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--balise);margin-bottom:12px;
+}
+.sec-t{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:700;
+  font-size:clamp(30px,5.4vw,50px);
+  line-height:1.02;letter-spacing:-.035em;
+  margin-bottom:14px;
+}
+.sec-l{color:var(--ink-2);max-width:640px;margin-bottom:32px;font-size:17px}
+
+/* ============ PROFIL SVG ============ */
+.profile{
+  background:var(--map-2);
+  border-top:3px solid var(--balise);
+  border:1px solid var(--rule);
+  padding:20px 16px 12px;
+  margin-bottom:34px;
+  overflow-x:auto;
+}
+.profile-hd{
+  display:flex;justify-content:space-between;align-items:baseline;
+  flex-wrap:wrap;gap:8px;margin-bottom:12px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+}
+.profile svg{display:block;min-width:640px;width:100%;height:auto}
+
+/* ============ STEP CARDS ============ */
+.step{
+  display:grid;
+  grid-template-columns:112px 1fr;
+  gap:26px;
+  padding:28px 0;
+  border-top:1px solid var(--rule);
+}
+.step:last-child{border-bottom:1px solid var(--rule)}
+@media(max-width:720px){.step{grid-template-columns:1fr;gap:12px;padding:22px 0}}
+
+.step-idx{position:relative}
+.step-n{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;font-size:42px;line-height:1;letter-spacing:-.05em;
+  color:var(--ink);
+}
+.step-when{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:5px;
+}
+.step-alt{
+  font-family:'DM Mono',monospace;
+  font-size:11px;color:var(--water);margin-top:7px;font-weight:500;
+}
+
+.step-t{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:700;font-size:24px;line-height:1.15;letter-spacing:-.02em;
+  margin-bottom:5px;
+}
+.step-r{
+  font-family:'DM Mono',monospace;
+  font-size:11.5px;color:var(--ink-2);
+  margin-bottom:15px;line-height:1.7;
+  word-break:break-word;
+}
+.step-r b{color:var(--balise);font-weight:500}
+
+.shot{
+  position:relative;width:100%;aspect-ratio:16/8;
+  overflow:hidden;margin-bottom:16px;
+  background:linear-gradient(135deg,#dfe3dc,#cfc9b4);
+  border:1px solid var(--rule);
+}
+.shot img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:0;
+  transition:opacity .7s ease,transform 7s ease-out;
+  filter:saturate(.92) contrast(1.03);
+}
+.shot img.on{opacity:1}
+.shot:hover img{transform:scale(1.04)}
+.shot figcaption{
+  position:absolute;left:0;bottom:0;z-index:2;
+  background:var(--map);
+  color:var(--ink-2);
+  border-top:1px solid var(--rule);border-right:1px solid var(--rule);
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 11px;
+}
+
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.chip{
+  font-family:'DM Mono',monospace;
+  font-size:10.5px;letter-spacing:.06em;
+  padding:5px 10px;
+  border:1px solid var(--rule);
+  background:var(--map-3);
+  color:var(--ink-2);
+}
+.chip b{font-weight:500;color:var(--ink)}
+.chip.up{border-color:rgba(207,58,38,.4);color:var(--balise-2)}
+.chip.down{border-color:rgba(63,127,150,.45);color:var(--water)}
+.chip.time{border-color:rgba(192,139,44,.5);color:#8e6415}
+
+.step p{color:var(--ink-2);margin-bottom:13px;font-size:16.5px;line-height:1.62}
+
+.node{
+  display:flex;gap:11px;align-items:flex-start;
+  padding:13px 15px;
+  border-left:3px solid var(--larch);
+  background:rgba(192,139,44,.11);
+  font-size:15.5px;
+  margin-bottom:10px;
+}
+.node.sleep{border-left-color:var(--water);background:rgba(63,127,150,.09)}
+.node.warn{border-left-color:var(--balise);background:rgba(207,58,38,.08)}
+.node .lab{
+  font-family:'DM Mono',monospace;
+  font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);display:block;margin-bottom:3px;
+}
+.node .bd{color:var(--ink-2);line-height:1.5}
+.node .bd b{color:var(--ink);font-weight:500}
+
+/* ============ BUDGET ============ */
+.btable{border:1px solid var(--rule);background:var(--map-2);overflow-x:auto;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px;min-width:560px}
+thead th{
+  text-align:left;padding:11px 14px;
+  font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:400;
+  border-bottom:1px solid var(--rule);
+  background:rgba(32,36,31,.045);
+  white-space:nowrap;
+}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--rule-2);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+td.lbl{color:var(--ink);font-weight:500;white-space:nowrap}
+td.det{color:var(--ink-3);font-family:'Newsreader',serif;font-size:14px;font-style:italic}
+td.eur{text-align:right;white-space:nowrap;color:var(--ink)}
+td.eur.free{color:var(--ink-3)}
+tr.grp td{
+  background:var(--map-3);color:var(--balise-2);
+  font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  padding:9px 14px;
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+}
+tr.tot td{
+  border-top:2px solid var(--ink);
+  background:rgba(32,36,31,.05);
+  font-weight:500;font-size:13px;color:var(--ink);
+}
+.big-tot{
+  display:flex;justify-content:space-between;align-items:baseline;
+  flex-wrap:wrap;gap:12px;
+  background:var(--map-2);color:var(--ink);
+  border:1px solid var(--rule);
+  border-top:3px solid var(--balise);
+  padding:22px 24px;
+}
+.big-tot .k{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3)}
+.big-tot .v{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:40px;letter-spacing:-.04em;line-height:1;color:var(--balise)}
+.big-tot .v small{font-size:15px;font-weight:400;color:var(--ink-3);margin-left:3px}
+
+.cargrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+@media(max-width:720px){.cargrid{grid-template-columns:1fr 1fr}}
+.carcell{border:1px solid var(--rule);padding:16px;background:var(--map-2)}
+.carcell .k{font-family:'DM Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px}
+.carcell .v{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:22px;letter-spacing:-.03em;line-height:1}
+.carcell .v small{font-size:11px;font-weight:400;color:var(--ink-3)}
+
+/* ============ PRATIQUE ============ */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.pgrid{grid-template-columns:1fr}}
+.pcard{border:1px solid var(--rule);background:var(--map-2);padding:22px}
+.pcard h3{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:700;font-size:19px;letter-spacing:-.02em;margin-bottom:12px;
+  display:flex;align-items:center;gap:9px;
+}
+.pcard ul{list-style:none}
+.pcard li{
+  padding:8px 0;border-bottom:1px dotted var(--rule);
+  font-size:15px;color:var(--ink-2);
+}
+.pcard li:last-child{border-bottom:none}
+.pcard li b{color:var(--ink);font-weight:500}
+.pcard li .mono{font-family:'DM Mono',monospace;font-size:11.5px;color:var(--water)}
+
+.check li{display:flex;gap:11px;align-items:flex-start;cursor:pointer;user-select:none}
+.check li>*{pointer-events:none}
+.box{
+  width:16px;height:16px;flex-shrink:0;margin-top:3px;
+  border:1.5px solid var(--ink-3);position:relative;
+}
+.check li.done .box{background:var(--balise);border-color:var(--balise)}
+.check li.done .box::after{
+  content:"✓";position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:11px;line-height:1;
+}
+.check li.done .txt{text-decoration:line-through;color:var(--ink-3)}
+
+/* ============ FOOTER ============ */
+footer{
+  border-top:1px solid var(--rule);
+  margin-top:40px;padding:34px 20px 44px;
+  text-align:center;position:relative;z-index:2;
+}
+.foot-m{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:700;font-size:17px;letter-spacing:-.02em;margin-bottom:6px;
+}
+.foot-s{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.foot-b{display:flex;justify-content:center;gap:5px;margin-top:14px}
+
+/* ============ SHARE ============ */
+.fab{
+  position:fixed;bottom:18px;right:18px;z-index:70;
+  width:48px;height:48px;border-radius:50%;
+  background:var(--ink);color:var(--map);
+  font-size:19px;
+  box-shadow:0 6px 18px -5px rgba(32,36,31,.6);
+}
+.fab:hover{background:var(--balise)}
+.toast{
+  position:fixed;bottom:76px;right:18px;z-index:71;
+  background:var(--ink);color:var(--map);
+  padding:9px 15px;
+  font-family:'DM Mono',monospace;font-size:11px;
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.toast.on{opacity:1}
+
+@media(max-width:620px){
+  .hd{padding:9px 14px;gap:9px}
+  .wrap{padding:0 16px}
+  .hero-in{padding:0 16px 26px}
+  .stats-in{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <div class="mark">
+      <span class="balise sm"></span>
+      QUEYRAS
+      <span class="sub">GR5 · 6 jours</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="route">Route aller</button>
+      <button class="tab" data-tab="trek">Le trek</button>
+      <button class="tab" data-tab="retour">Retour</button>
+      <button class="tab" data-tab="budget">Budget</button>
+      <button class="tab" data-tab="prat">Pratique</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-frame">
+    <img src="https://images.unsplash.com/photo-1600818596647-9d5318c20a8a?w=2000&q=80" alt="">
+    <div class="hero-tag"><span class="balise sm"></span> Massif du Queyras · Hautes-Alpes</div>
+  </div>
+</section>
+<div class="hero-in">
+  <div class="hero-kicker"><span class="balise"></span> Septembre · Bivouac · GR5</div>
+  <h1>QUEY<em>RAS</em></h1>
+  <p class="hero-sub">Six jours en boucle depuis Ceillac. Trois bivouacs d'altitude, deux gîtes, quatre cols — et le pas de 2&nbsp;884&nbsp;m à Chamoussière.</p>
+</div>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-in">
+    <div class="st"><div class="k">Dénivelé +</div><div class="v">3 470<small>m</small></div></div>
+    <div class="st"><div class="k">Dénivelé −</div><div class="v">3 480<small>m</small></div></div>
+    <div class="st"><div class="k">Marche</div><div class="v">≈25<small>h</small></div></div>
+    <div class="st"><div class="k">Point haut</div><div class="v">2 884<small>m</small></div></div>
+    <div class="st"><div class="k">Nuits</div><div class="v">3<small>biv</small> 2<small>gîte</small></div></div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="cd">
+  <div class="cd-k" id="cdk">Avant le départ de Bry</div>
+  <div class="cd-v" id="cdv">—</div>
+  <div class="cd-s" id="cds">Vendredi 11 septembre 2026 · retour le 19</div>
+</section>
+
+<!-- ============ PANEL : ROUTE ALLER ============ -->
+<section class="panel on" id="p-route">
+  <div class="wrap">
+    <div class="sec-k"><span class="balise"></span> I — Bry-sur-Marne → Ceillac</div>
+    <h2 class="sec-t">Deux jours de route,<br>une halte médiévale</h2>
+    <p class="sec-l">Environ 770 km jusqu'au pied du Mélezet, coupés par une nuit dans l'Ain. Le vrai point de friction n'est pas la distance mais le contournement de Grenoble.</p>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">01</div>
+        <div class="step-when">Vendredi</div>
+        <div class="step-alt">≈ 470 km</div>
+      </div>
+      <div>
+        <div class="step-t">Bry → secteur Meximieux</div>
+        <div class="step-r">A6 <b>→</b> A39 <b>→</b> A42</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1717506703370-57f729a71505?w=1500&q=80" alt="">
+          <figcaption>Trajet 1 · autoroute</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>≈ 4 h 45</b> de route</span>
+          <span class="chip"><b>23 €</b> de péage</span>
+        </div>
+        <p>Départ en fin d'après-midi pour casser la route. Nuit dans le secteur de Meximieux, à sept kilomètres de Pérouges — on se réveille déjà sur place.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Nuit 0</span><span class="bd">Hôtel secteur <b>Meximieux / Ain</b>. À réserver.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">02</div>
+        <div class="step-when">Samedi matin</div>
+        <div class="step-alt">Pérouges</div>
+      </div>
+      <div>
+        <div class="step-t">Cité de Pérouges</div>
+        <div class="step-r">Parking des Combes <b>→</b> Place du Tilleul</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1692364587876-6251cb454c58?w=1500&q=80" alt="">
+          <figcaption>Pérouges · cité médiévale</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip"><b>2 €</b> parking</span>
+          <span class="chip"><b>0 m</b> de marche d'approche</span>
+          <span class="chip time"><b>1 h 30</b> sur place</span>
+        </div>
+        <p>Garez-vous au <b>parking des Combes</b> : la cité est immédiatement accessible à pied, pas de navette ni de montée. Cible la <b>Place du Tilleul</b> pour le café — c'est le cœur de la cité, sous le tilleul planté à la Révolution.</p>
+        <div class="node warn">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">À ne pas louper</span><span class="bd">Repartir avant midi. La suite est longue et la fenêtre Grenoble se referme vite.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">03</div>
+        <div class="step-when">Samedi midi</div>
+        <div class="step-alt">2 058 m</div>
+      </div>
+      <div>
+        <div class="step-t">Grenoble &amp; Col du Lautaret</div>
+        <div class="step-r">A480 <b>→</b> Bourg-d'Oisans <b>→</b> Lautaret <b>→</b> Briançon</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1572491671313-e2bb1bf15e76?w=1500&q=80" alt="">
+          <figcaption>Col du Lautaret · 2 058 m</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip up"><b>+ 2 058 m</b> au col</span>
+          <span class="chip time"><b>≈ 3 h 30</b></span>
+        </div>
+        <p>Le <b>contournement de Grenoble par l'A480</b> est le point noir de la journée : souvent bouché, y compris le samedi. Garde de la marge.</p>
+        <p>La montée au <b>Lautaret</b> est ensuite large et roulante — pas de difficulté, on prend juste de l'altitude régulièrement face à la Meije.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">04</div>
+        <div class="step-when">Samedi PM</div>
+        <div class="step-alt">D902</div>
+      </div>
+      <div>
+        <div class="step-t">Gorges du Guil</div>
+        <div class="step-r">Guillestre <b>→</b> D902 <b>→</b> entrée du Queyras</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1745840091593-70a235f229e0?w=1500&q=80" alt="">
+          <figcaption>Gorges du Guil · D902</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip"><b>Route étroite</b></span>
+          <span class="chip"><b>Creusée dans la roche</b></span>
+        </div>
+        <p>Passé Guillestre, on entre vraiment dans le Queyras. La <b>D902</b> se faufile dans les gorges, taillée à même la falaise — étroit, spectaculaire, et pas le moment de doubler.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">05</div>
+        <div class="step-when">Samedi soir</div>
+        <div class="step-alt">1 690 m</div>
+      </div>
+      <div>
+        <div class="step-t">Ceillac — Pied du Mélezet</div>
+        <div class="step-r">Ceillac centre <b>→</b> +2 km <b>→</b> Parking du Mélezet</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1695327687103-fc2b7209c16a?w=1500&q=80" alt="">
+          <figcaption>Ceillac · 1 690 m</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip"><b>Gratuit</b></span>
+          <span class="chip"><b>Sûr</b> pour la semaine</span>
+          <span class="chip up">Au pied du <b>GR5</b></span>
+        </div>
+        <p>Le <b>Parking du Pied du Mélezet</b> se situe à 2 km après le centre de Ceillac, à 1 690 m. Gratuit, sûr pour y laisser la voiture une semaine, et surtout : le sentier part exactement de là.</p>
+        <div class="node warn">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Décision du soir</span><span class="bd">Soit vous enchaînez <b>J1</b> dans la foulée (2 h de montée, arrivée au Lac Miroir avant la nuit), soit vous dormez à Ceillac et décalez tout d'un jour.</span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PANEL : TREK ============ -->
+<section class="panel" id="p-trek">
+  <div class="wrap">
+    <div class="sec-k"><span class="balise"></span> II — Massif du Queyras</div>
+    <h2 class="sec-t">Six jours,<br>quatre cols, trois lacs</h2>
+    <p class="sec-l">Boucle au départ et à l'arrivée du Parking du Mélezet. Trois nuits sous tente en autonomie complète, deux nuits en gîte avec ravitaillement.</p>
+
+    <!-- PROFIL ALTIMÉTRIQUE -->
+    <div class="profile">
+      <div class="profile-hd">
+        <span>Profil altimétrique · boucle complète</span>
+        <span>1 550 m → 2 884 m</span>
+      </div>
+      <svg viewBox="0 0 1000 285" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Profil altimétrique du trek">
+        <defs>
+          <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#cf3a26" stop-opacity=".28"/>
+            <stop offset="100%" stop-color="#cf3a26" stop-opacity=".02"/>
+          </linearGradient>
+        </defs>
+        <!-- grid -->
+        <g stroke="#22261f" stroke-opacity=".14" stroke-width="1">
+          <line x1="0" y1="30" x2="1000" y2="30"/>
+          <line x1="0" y1="87" x2="1000" y2="87"/>
+          <line x1="0" y1="144" x2="1000" y2="144"/>
+          <line x1="0" y1="201" x2="1000" y2="201"/>
+          <line x1="0" y1="250" x2="1000" y2="250"/>
+        </g>
+        <g font-family="DM Mono, monospace" font-size="9" fill="#8e9179">
+          <text x="2" y="27">2900</text>
+          <text x="2" y="84">2550</text>
+          <text x="2" y="141">2200</text>
+          <text x="2" y="198">1850</text>
+          <text x="2" y="247">1500</text>
+        </g>
+        <!-- area -->
+        <path fill="url(#fill)" d="M20,203 L94,129 L168,203 L241,66 L315,153 L389,101 L463,32 L537,70 L611,201 L685,223 L758,123 L832,180 L906,116 L980,203 L980,250 L20,250 Z"/>
+        <!-- line -->
+        <polyline fill="none" stroke="#cf3a26" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"
+          points="20,203 94,129 168,203 241,66 315,153 389,101 463,32 537,70 611,201 685,223 758,123 832,180 906,116 980,203"/>
+        <!-- nodes -->
+        <g fill="#faf8f1" stroke="#22261f" stroke-width="1.6">
+          <circle cx="20" cy="203" r="4"/><circle cx="168" cy="203" r="3"/>
+          <circle cx="315" cy="153" r="4"/><circle cx="389" cy="101" r="3"/>
+          <circle cx="611" cy="201" r="3"/><circle cx="685" cy="223" r="4"/>
+          <circle cx="832" cy="180" r="4"/><circle cx="980" cy="203" r="4"/>
+        </g>
+        <!-- lakes -->
+        <g fill="#3f7f96" stroke="#faf8f1" stroke-width="1.6">
+          <circle cx="94" cy="129" r="4.5"/><circle cx="537" cy="70" r="4.5"/>
+        </g>
+        <!-- cols -->
+        <g fill="#cf3a26" stroke="#faf8f1" stroke-width="1.6">
+          <circle cx="241" cy="66" r="4.5"/><circle cx="463" cy="32" r="5.5"/>
+          <circle cx="758" cy="123" r="4.5"/><circle cx="906" cy="116" r="4.5"/>
+        </g>
+        <!-- labels -->
+        <g font-family="DM Mono, monospace" font-size="9.5" fill="#22261f">
+          <text x="94" y="120" text-anchor="middle">Miroir 2210</text>
+          <text x="241" y="57" text-anchor="middle">Estronques 2651</text>
+          <text x="463" y="22" text-anchor="middle">Chamoussière 2884</text>
+          <text x="537" y="61" text-anchor="start">Foréant 2618</text>
+          <text x="758" y="114" text-anchor="middle">Bramousse 2251</text>
+          <text x="906" y="107" text-anchor="middle">Col Fromage 2301</text>
+        </g>
+        <g font-family="DM Mono, monospace" font-size="9" fill="#8e9179">
+          <text x="20" y="266" text-anchor="start">Mélezet</text>
+          <text x="315" y="266" text-anchor="middle">St-Véran</text>
+          <text x="685" y="266" text-anchor="middle">Abriès</text>
+          <text x="980" y="266" text-anchor="end">Ceillac</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- J1 -->
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">J1</div>
+        <div class="step-when">Mise en jambe</div>
+        <div class="step-alt">1 690 → 2 210 m</div>
+      </div>
+      <div>
+        <div class="step-t">Lac Miroir</div>
+        <div class="step-r">Parking du Mélezet <b>→</b> Cascade de la Pisse <b>→</b> Lac Miroir</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1708173606478-2d3653033b77?w=1500&q=80" alt="">
+          <figcaption>J1 · Lac Miroir · 2 210 m</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>2 h</b></span>
+          <span class="chip up">D+ <b>520 m</b></span>
+          <span class="chip down">D− <b>0 m</b></span>
+        </div>
+        <p>Montée raide dès le départ le long de la <b>cascade de la Pisse</b>, puis ça s'aplatit en forêt. Courte étape, parfaite pour caler le sac et les chaussures.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Bivouac 1</span><span class="bd">Lac Miroir. Plante la tente sur la <b>rive ouest</b> : tu auras le soleil sur la toile dès le lever.</span></div>
+        </div>
+        <div class="node">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Eau</span><span class="bd">Le lac — <b>à filtrer impérativement</b>.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- J2 -->
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">J2</div>
+        <div class="step-when">Le premier mur</div>
+        <div class="step-alt">→ 2 651 m → 2 040 m</div>
+      </div>
+      <div>
+        <div class="step-t">Col des Estronques → Saint-Véran</div>
+        <div class="step-r">Lac Miroir <b>→</b> Mélezet <b>→</b> Col des Estronques <b>→</b> Saint-Véran</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1598896169276-6391fb74ade1?w=1500&q=80" alt="">
+          <figcaption>J2 · Saint-Véran · 2 040 m</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>5 h 30 – 6 h</b></span>
+          <span class="chip up">D+ <b>960 m</b></span>
+          <span class="chip down">D− <b>1 100 m</b></span>
+        </div>
+        <p>Descente express au Mélezet, puis l'ascension longue et <b>exposée au soleil</b> jusqu'au col. La dernière partie est raide. Grosse journée : partez tôt.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Gîte 2</span><span class="bd">Saint-Véran — <b>« Les Gabelous »</b> ou le gîte d'étape communal. À réserver.</span></div>
+        </div>
+        <div class="node">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Ravitaillement</span><span class="bd">Boulangerie + petite épicerie sur place. Premier vrai réassort.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- J3 -->
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">J3</div>
+        <div class="step-when">L'étage alpin</div>
+        <div class="step-alt">→ 2 884 m → 2 618 m</div>
+      </div>
+      <div>
+        <div class="step-t">Col de Chamoussière → Lac Foréant</div>
+        <div class="step-r">Saint-Véran <b>→</b> Chapelle de Clausis <b>→</b> Chamoussière <b>→</b> Lac Foréant</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1629712759834-26fd7b2f0388?w=1500&q=80" alt="">
+          <figcaption>J3 · Lac Foréant · 2 618 m</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>5 h</b></span>
+          <span class="chip up">D+ <b>840 m</b></span>
+          <span class="chip down">D− <b>260 m</b></span>
+          <span class="chip"><b>Point culminant</b></span>
+        </div>
+        <p>Le sommet du trek : <b>2 884 m</b> au Col de Chamoussière. Zéro végétation, univers strictement minéral. Le Lac Foréant s'ouvre juste derrière, sous les Pics de la Font Sancte.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Bivouac 3</span><span class="bd">Lac Foréant. Spot très minéral — <b>la nuit la plus froide du séjour</b> : altitude élevée et souvent venté.</span></div>
+        </div>
+        <div class="node">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Eau</span><span class="bd">Le lac — <b>à filtrer</b>.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- J4 -->
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">J4</div>
+        <div class="step-when">La descente</div>
+        <div class="step-alt">2 618 → 1 550 m</div>
+      </div>
+      <div>
+        <div class="step-t">L'Échalp → Abriès</div>
+        <div class="step-r">Lac Foréant <b>→</b> L'Échalp <b>→</b> le long du Guil <b>→</b> Abriès</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1724477031857-9e355af568fc?w=1500&q=80" alt="">
+          <figcaption>J4 · Abriès · 1 550 m</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>4 h 30</b></span>
+          <span class="chip up">D+ <b>0 m</b></span>
+          <span class="chip down">D− <b>1 060 m</b></span>
+        </div>
+        <p>Descente <b>exigeante pour les genoux</b> dans les éboulis au départ — bâtons obligatoires. Puis le sentier devient ultra-plat le long du Guil jusqu'à Abriès.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Gîte 4</span><span class="bd">Abriès — <b>« L'Étoile »</b> ou <b>« L'Auberge de l'Échau »</b>. À réserver.</span></div>
+        </div>
+        <div class="node warn">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Dernier ravito</span><span class="bd">Supérette <b>Proxi</b> — <b>ferme vers 19 h</b>. C'est ici qu'on rachète les lyophilisés et les pâtes pour les deux derniers jours.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- J5 -->
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">J5</div>
+        <div class="step-when">Forêts de mélèzes</div>
+        <div class="step-alt">→ 2 251 m → 1 850 m</div>
+      </div>
+      <div>
+        <div class="step-t">Col de Bramousse</div>
+        <div class="step-r">Abriès <b>→</b> Col de Bramousse <b>→</b> Chalets de Bramousse</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1534070867092-7645943d8cef?w=1500&q=80" alt="">
+          <figcaption>J5 · forêt de mélèzes</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>4 h</b></span>
+          <span class="chip up">D+ <b>700 m</b></span>
+          <span class="chip down">D− <b>400 m</b></span>
+        </div>
+        <p>Remontée <b>à l'ombre</b> dans la forêt, chemin très souple sous les épines. En septembre les mélèzes commencent à virer au jaune — la plus belle étape en lumière.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Bivouac 5</span><span class="bd">Alpages des Chalets de Bramousse. Terrain <b>herbeux et plat</b>, excellente accroche pour les sardines.</span></div>
+        </div>
+        <div class="node">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Eau</span><span class="bd">Torrent à proximité — <b>à filtrer</b>.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- J6 -->
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">J6</div>
+        <div class="step-when">Le retour</div>
+        <div class="step-alt">→ 2 301 m → 1 690 m</div>
+      </div>
+      <div>
+        <div class="step-t">Col Fromage → Ceillac</div>
+        <div class="step-r">Chalets de Bramousse <b>→</b> Col Fromage <b>→</b> Parking du Mélezet</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1684670157472-b90d5f7544b5?w=1500&q=80" alt="">
+          <figcaption>J6 · Col Fromage · 2 301 m</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>3 h 30</b></span>
+          <span class="chip up">D+ <b>450 m</b></span>
+          <span class="chip down">D− <b>660 m</b></span>
+        </div>
+        <p>Une dernière petite bosse au <b>Col Fromage</b>, puis descente directe sur le parking. Boucle bouclée : la voiture est là où on l'a laissée six jours plus tôt.</p>
+        <div class="node warn">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Enchaînement</span><span class="bd">Étape courte : on arrive en début d'après-midi, largement de quoi <b>descendre sur Embrun</b> dans la foulée.</span></div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PANEL : RETOUR ============ -->
+<section class="panel" id="p-retour">
+  <div class="wrap">
+    <div class="sec-k"><span class="balise"></span> III — Ceillac → Bry-sur-Marne</div>
+    <h2 class="sec-t">Deux jours pour<br>redescendre en douceur</h2>
+    <p class="sec-l">Une soirée pour fêter la fin du trek, une nuit dans le Jura, et une reculée géologique en guise de dernier détour.</p>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">06</div>
+        <div class="step-when">Jeudi PM</div>
+        <div class="step-alt">≈ 35 km</div>
+      </div>
+      <div>
+        <div class="step-t">Embrun</div>
+        <div class="step-r">Ceillac <b>→</b> Guillestre <b>→</b> Embrun</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1691611430683-5bf36b27fac3?w=1500&q=80" alt="">
+          <figcaption>Embrun · au-dessus de la Durance</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>45 min</b></span>
+          <span class="chip"><b>Dîner de fin de trek</b></span>
+        </div>
+        <p>Descendez à <b>Embrun</b> plutôt qu'à Savines-le-Lac. Le centre historique est juché sur un roc au-dessus de la Durance, et l'offre de restaurants est nettement meilleure pour fêter la fin du trek.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Nuit</span><span class="bd">Embrun — hôtel à réserver. Première vraie douche depuis Abriès.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">07</div>
+        <div class="step-when">Vendredi</div>
+        <div class="step-alt">≈ 380 km</div>
+      </div>
+      <div>
+        <div class="step-t">Embrun → Lons-le-Saunier</div>
+        <div class="step-r">Gap <b>→</b> Grenoble <b>→</b> A48 / A42 / A39 <b>→</b> Lons</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1668620997342-8d847135ff42?w=1500&q=80" alt="">
+          <figcaption>Trajet 3 · Gap &amp; Grenoble</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>≈ 4 h 30</b></span>
+        </div>
+        <p>Remontée par Gap puis Grenoble. Nuit à <b>Lons-le-Saunier</b> ou dans un village limitrophe de Baume-les-Messieurs, pour être sur place au réveil.</p>
+        <div class="node sleep">
+          <span class="balise sm" style="margin-top:6px"></span>
+          <div><span class="lab">Nuit</span><span class="bd">Lons-le-Saunier ou environs de <b>Baume-les-Messieurs</b>.</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">08</div>
+        <div class="step-when">Samedi matin</div>
+        <div class="step-alt">Jura</div>
+      </div>
+      <div>
+        <div class="step-t">Baume-les-Messieurs</div>
+        <div class="step-r">Parking de l'Abbaye <b>→</b> 2 km à plat <b>→</b> Cascade des Tufs</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1615711088116-03b5a9fd345a?w=1500&q=80" alt="">
+          <figcaption>Baume-les-Messieurs · abbaye impériale</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip"><b>2 km</b> aller</span>
+          <span class="chip up">Falaises <b>200 m</b></span>
+          <span class="chip time"><b>1 h 30</b></span>
+        </div>
+        <p>Garez-vous sur le parking de l'<b>Abbaye impériale</b>. Le site est un cul-de-sac géologique : la reculée se ferme sur elle-même. Marchez 2 km sur le chemin plat au fond de la reculée pour aller voir la <b>Cascade des Tufs</b>, au pied de falaises de 200 mètres.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-idx">
+        <div class="step-n">09</div>
+        <div class="step-when">Samedi PM</div>
+        <div class="step-alt">≈ 420 km</div>
+      </div>
+      <div>
+        <div class="step-t">Retour Bry-sur-Marne</div>
+        <div class="step-r">A39 <b>→</b> A5 <b>→</b> Bry</div>
+        <figure class="shot">
+          <img src="https://images.unsplash.com/photo-1717506703370-57f729a71505?w=1500&q=80" alt="">
+          <figcaption>Trajet 4 · A39 / A5</figcaption>
+        </figure>
+        <div class="chips">
+          <span class="chip time"><b>≈ 4 h</b></span>
+          <span class="chip"><b>Direct</b></span>
+        </div>
+        <p>A39 direct, connexion A5, arrivée à Bry en 4 h. Fin de boucle.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ PANEL : BUDGET ============ -->
+<section class="panel" id="p-budget">
+  <div class="wrap">
+    <div class="sec-k"><span class="balise"></span> IV — Estimation</div>
+    <h2 class="sec-t">Budget prévisionnel</h2>
+    <p class="sec-l">Base <b>2 personnes</b>, Dacia Sandero essence. Chiffres à ajuster dès que les réservations sont confirmées.</p>
+
+    <div class="cargrid">
+      <div class="carcell"><div class="k">Distance A/R</div><div class="v">≈1 630<small> km</small></div></div>
+      <div class="carcell"><div class="k">Conso retenue</div><div class="v">6,3<small> L/100</small></div></div>
+      <div class="carcell"><div class="k">Volume total</div><div class="v">≈103<small> L</small></div></div>
+      <div class="carcell"><div class="k">Prix SP95</div><div class="v">1,80<small> €/L</small></div></div>
+    </div>
+
+    <div class="btable">
+      <table>
+        <thead>
+          <tr><th>Poste</th><th>Détail</th><th style="text-align:right">Total</th><th style="text-align:right">/ pers.</th></tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="4">Voiture &amp; route</td></tr>
+          <tr><td class="lbl">Carburant</td><td class="det">1 630 km · 6,3 L/100 · 1,80 €/L</td><td class="eur">185 €</td><td class="eur">93 €</td></tr>
+          <tr><td class="lbl">Péages A/R</td><td class="det">A6/A39 aller 23 € + A48/A43 + A39 retour</td><td class="eur">105 €</td><td class="eur">53 €</td></tr>
+          <tr><td class="lbl">Parking Pérouges</td><td class="det">Les Combes</td><td class="eur">2 €</td><td class="eur">1 €</td></tr>
+          <tr><td class="lbl">Parking Mélezet</td><td class="det">6 jours — gratuit</td><td class="eur free">0 €</td><td class="eur free">0 €</td></tr>
+
+          <tr class="grp"><td colspan="4">Nuits sur la route</td></tr>
+          <tr><td class="lbl">Meximieux</td><td class="det">Vendredi · chambre double</td><td class="eur">80 €</td><td class="eur">40 €</td></tr>
+          <tr><td class="lbl">Embrun</td><td class="det">Jeudi · hôtel + dîner de fin de trek</td><td class="eur">140 €</td><td class="eur">70 €</td></tr>
+          <tr><td class="lbl">Lons-le-Saunier</td><td class="det">Vendredi retour · chambre double</td><td class="eur">80 €</td><td class="eur">40 €</td></tr>
+
+          <tr class="grp"><td colspan="4">Nuits sur le trek</td></tr>
+          <tr><td class="lbl">Gîte Saint-Véran</td><td class="det">J2 · demi-pension ×2</td><td class="eur">110 €</td><td class="eur">55 €</td></tr>
+          <tr><td class="lbl">Gîte Abriès</td><td class="det">J4 · demi-pension ×2</td><td class="eur">110 €</td><td class="eur">55 €</td></tr>
+          <tr><td class="lbl">Bivouacs</td><td class="det">J1 Miroir · J3 Foréant · J5 Bramousse</td><td class="eur free">0 €</td><td class="eur free">0 €</td></tr>
+
+          <tr class="grp"><td colspan="4">Nourriture &amp; divers</td></tr>
+          <tr><td class="lbl">Nourriture trek</td><td class="det">Lyophilisés + ravito St-Véran / Abriès</td><td class="eur">170 €</td><td class="eur">85 €</td></tr>
+          <tr><td class="lbl">Repas route</td><td class="det">Pérouges, aires, Baume-les-Messieurs</td><td class="eur">120 €</td><td class="eur">60 €</td></tr>
+          <tr><td class="lbl">Gaz, carte, imprévus</td><td class="det">Cartouches, IGN TOP25, marge</td><td class="eur">60 €</td><td class="eur">30 €</td></tr>
+
+          <tr class="tot"><td class="lbl">TOTAL</td><td class="det">estimation, hors matériel</td><td class="eur">1 162 €</td><td class="eur">581 €</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="big-tot">
+      <span class="k">Par personne</span>
+      <span class="v">581<small>€</small></span>
+    </div>
+
+    <div class="node warn" style="margin-top:22px">
+      <span class="balise sm" style="margin-top:6px"></span>
+      <div><span class="lab">Postes les plus élastiques</span><span class="bd">Les <b>hôtels de route</b> (±60 €) et les <b>restos</b> (±80 €). Les péages peuvent aussi varier de 20 € selon les itinéraires choisis autour de Grenoble.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PANEL : PRATIQUE ============ -->
+<section class="panel" id="p-prat">
+  <div class="wrap">
+    <div class="sec-k"><span class="balise"></span> V — Terrain</div>
+    <h2 class="sec-t">Pratique</h2>
+    <p class="sec-l">Ce qu'il faut avoir réglé avant de fermer le coffre.</p>
+
+    <div class="pgrid">
+      <div class="pcard">
+        <h3><span class="balise sm"></span> Septembre en Queyras</h3>
+        <ul>
+          <li><b>Vallées</b> — 12 à 18 °C en journée <span class="mono">1 500–1 800 m</span></li>
+          <li><b>Cols</b> — 3 à 10 °C, vent fréquent <span class="mono">2 300–2 900 m</span></li>
+          <li><b>Nuits en altitude</b> — gel possible au-dessus de 2 500 m. Le bivouac du <b>Lac Foréant</b> est le point critique.</li>
+          <li><b>Sac de couchage</b> — confort 0 °C minimum, matelas isolant R ≥ 3.</li>
+          <li><b>Jours</b> — nuit vers 20 h. Prévoir la frontale dès J1 si vous montez au Miroir le samedi soir.</li>
+        </ul>
+      </div>
+
+      <div class="pcard">
+        <h3><span class="balise sm"></span> Eau &amp; ravitaillement</h3>
+        <ul>
+          <li><b>Filtre obligatoire</b> — les trois bivouacs s'alimentent en eau naturelle (lacs Miroir et Foréant, torrent de Bramousse).</li>
+          <li><b>Saint-Véran (J2)</b> — boulangerie + petite épicerie.</li>
+          <li><b>Abriès (J4)</b> — supérette Proxi, <b>ferme vers 19 h</b>. Dernier réassort avant la fin.</li>
+          <li><b>Autonomie à prévoir</b> — J1, J3 et J5 sans aucun commerce.</li>
+          <li><b>Capacité</b> — 2 L par personne minimum, 3 L sur J3 (versant sud, zéro ombre).</li>
+        </ul>
+      </div>
+
+      <div class="pcard">
+        <h3><span class="balise sm"></span> Bivouac &amp; règles</h3>
+        <ul>
+          <li><b>Horaires</b> — tente montée au coucher du soleil, démontée au lever. C'est la règle du bivouac en zone protégée.</li>
+          <li><b>Feu</b> — interdit. Réchaud uniquement.</li>
+          <li><b>Déchets</b> — tout redescend, y compris l'organique.</li>
+          <li><b>Rive ouest au Lac Miroir</b> — soleil dès le lever sur la toile.</li>
+          <li><b>Bramousse</b> — terrain herbeux plat, la meilleure accroche pour les sardines du séjour.</li>
+        </ul>
+      </div>
+
+      <div class="pcard">
+        <h3><span class="balise sm"></span> À réserver</h3>
+        <ul>
+          <li><b>Gîte Saint-Véran</b> — Les Gabelous ou gîte communal <span class="mono">J2</span></li>
+          <li><b>Gîte Abriès</b> — L'Étoile ou L'Auberge de l'Échau <span class="mono">J4</span></li>
+          <li><b>Hôtel Meximieux</b> <span class="mono">vendredi aller</span></li>
+          <li><b>Hôtel Embrun</b> <span class="mono">jeudi retour</span></li>
+          <li><b>Hôtel Lons-le-Saunier</b> <span class="mono">vendredi retour</span></li>
+          <li><b>Carte</b> — IGN TOP25 <b>3637 OT</b> (Mont Viso / Saint-Véran / Aiguilles)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pcard" style="margin-top:22px">
+      <h3><span class="balise sm"></span> Checklist matériel</h3>
+      <ul class="check" id="check">
+        <li><span class="box"></span><span class="txt">Tente + sardines (terrain dur au Foréant)</span></li>
+        <li><span class="box"></span><span class="txt">Sac de couchage confort 0 °C</span></li>
+        <li><span class="box"></span><span class="txt">Matelas isolant R ≥ 3</span></li>
+        <li><span class="box"></span><span class="txt">Filtre à eau + poche 2 L</span></li>
+        <li><span class="box"></span><span class="txt">Réchaud + cartouches gaz</span></li>
+        <li><span class="box"></span><span class="txt">Bâtons de marche (descente J4)</span></li>
+        <li><span class="box"></span><span class="txt">Doudoune + polaire + coupe-vent</span></li>
+        <li><span class="box"></span><span class="txt">Veste imperméable</span></li>
+        <li><span class="box"></span><span class="txt">Bonnet + gants (nuits &gt; 2 500 m)</span></li>
+        <li><span class="box"></span><span class="txt">Frontale + piles de rechange</span></li>
+        <li><span class="box"></span><span class="txt">Crème solaire + lunettes cat. 3</span></li>
+        <li><span class="box"></span><span class="txt">Trousse de secours + ampoules</span></li>
+        <li><span class="box"></span><span class="txt">Carte IGN 3637 OT + boussole</span></li>
+        <li><span class="box"></span><span class="txt">Batterie externe (zéro recharge sur 3 jours)</span></li>
+        <li><span class="box"></span><span class="txt">Lyophilisés J1 → J4</span></li>
+        <li><span class="box"></span><span class="txt">Espèces (gîtes, épiceries de village)</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<button class="fab" id="fab" aria-label="Partager">↗</button>
+<div class="toast" id="toast">Lien copié</div>
+
+<footer>
+  <div class="foot-m">Queyras · boucle de Ceillac</div>
+  <div class="foot-s">3 470 m D+ · 4 cols · 3 bivouacs</div>
+  <div class="foot-b">
+    <span class="balise"></span><span class="balise"></span><span class="balise"></span>
+  </div>
+</footer>
+
+<script>
+/* ====== DATE DE DÉPART — change juste cette ligne ====== */
+var DEPART = new Date('2026-09-11T17:00:00');
+var RETOUR = new Date('2026-09-19T23:59:59');
+var TREK_START = new Date('2026-09-12T00:00:00'); /* J1 */
+
+/* ====== IMAGES ====== */
+document.querySelectorAll('img').forEach(function(i){
+  if(i.complete && i.naturalWidth>0){ i.classList.add('on'); }
+  else{
+    i.addEventListener('load',function(){ i.classList.add('on'); });
+    i.addEventListener('error',function(){ i.style.opacity='0'; });
+  }
+});
+
+/* ====== ONGLETS ====== */
+document.querySelector('.tabs').addEventListener('click',function(e){
+  var b = e.target.closest('.tab');
+  if(!b) return;
+  var id = b.getAttribute('data-tab');
+  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+  b.classList.add('active');
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('on'); });
+  var pan = document.getElementById('p-'+id);
+  if(pan) pan.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* ====== COMPTE À REBOURS ====== */
+(function(){
+  var v = document.getElementById('cdv');
+  var k = document.getElementById('cdk');
+  var s = document.getElementById('cds');
+  function up(){
+    var now = new Date(), d = 86400000;
+    if(now < DEPART){
+      v.textContent = 'J−' + Math.ceil((DEPART-now)/d);
+    } else if(now <= RETOUR){
+      var n = Math.floor((now-TREK_START)/d)+1;
+      if(n >= 1 && n <= 6){
+        v.textContent = 'J' + n + '/6';
+        k.textContent = 'Sur le sentier';
+        s.textContent = 'Quelque part entre Ceillac et Abriès';
+      } else {
+        v.textContent = '↗';
+        k.textContent = 'En route';
+        s.textContent = 'Trajet en cours';
+      }
+    } else {
+      v.textContent = '✓';
+      k.textContent = 'Boucle bouclée';
+      s.textContent = 'Queyras · septembre 2026';
+    }
+  }
+  up();
+  setInterval(up, 60000);
+})();
+
+/* ====== CHECKLIST ====== */
+(function(){
+  var l = document.getElementById('check');
+  if(!l) return;
+  var saved = [];
+  try{ saved = JSON.parse(localStorage.getItem('queyras-pack') || '[]'); }catch(e){}
+  var items = l.querySelectorAll('li');
+  items.forEach(function(li,i){
+    if(saved.indexOf(i) >= 0) li.classList.add('done');
+    li.addEventListener('click',function(){
+      li.classList.toggle('done');
+      var d = [];
+      items.forEach(function(x,j){ if(x.classList.contains('done')) d.push(j); });
+      try{ localStorage.setItem('queyras-pack', JSON.stringify(d)); }catch(e){}
+    });
+  });
+})();
+
+/* ====== PARTAGE ====== */
+(function(){
+  var f = document.getElementById('fab'), t = document.getElementById('toast');
+  f.addEventListener('click', async function(){
+    var u = window.location.href;
+    if(navigator.share){
+      try{ await navigator.share({title:'Queyras · topo-guide', url:u}); return; }catch(e){}
+    }
+    try{
+      await navigator.clipboard.writeText(u);
+      t.classList.add('on');
+      setTimeout(function(){ t.classList.remove('on'); }, 1800);
+    }catch(e){ prompt('Lien :', u); }
+  });
+})();
+</script>
+
+</body>
+</html>
